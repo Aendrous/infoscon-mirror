@@ -1,0 +1,211 @@
+<?php if (!is_Home() && !is_404() && !is_Page() && !is_category() && !in_category(1)){
+	echo '<section class="breadcrumbs">';
+	yoast_breadcrumb('<div class="breadcrumbs__nav">','</div>');
+	echo '</section>';
+}
+?>
+
+
+
+		</div> <!-- /main -->
+
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="http://yastatic.net/jquery/cookie/1.0/jquery.cookie.min.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+		<!-- smooth scroll -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+<link rel="stylesheet" href="https://infoscon.ru/wp-content/themes/infoscon/js/smoke-pure.css">
+<script src="https://infoscon.ru/wp-content/themes/infoscon/js/smoke-pure.js"></script>
+
+
+<script src="<?php bloginfo('template_url'); ?>/js/script.js"></script>
+
+<link rel="stylesheet" href="<?php bloginfo('template_url'); ?>/infoscon.css">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.4.0/animate.min.css">
+
+<style>
+		/*  imports */
+	@import url(https://fonts.googleapis.com/css?family=Roboto+Slab:400,700&subset=cyrillic);
+	@import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=cyrillic);
+	@import url(https://fonts.googleapis.com/css?family=Roboto:300,400&amp;subset=cyrillic);
+    @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css);
+
+		/* fonts */
+	@font-face {
+	  font-family: 'Roboto Slab', 'Open Sans', 'Roboto';
+	  src: url('roboto.eot'); /* IE9 Compat Modes */
+  src: url('roboto.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('roboto.woff') format('woff'), /* Modern Browsers */
+  url('roboto.ttf')  format('truetype'), /* Safari, Android, iOS */
+  url('roboto.svg#svgFontName') format('svg'); /* Legacy iOS */
+
+	  font-display: fallback;
+	 }
+</style>
+
+
+<!-- ФУТЕР -->
+<footer>
+	<section>
+
+
+		<nav class="nav-info">
+			<ul>
+				<div class="nav__title">Разделы</div>
+				<?php wp_nav_menu('menu=footer_menu_info&menu_class=&container=&'); ?>
+			</ul>
+		</nav>
+		<nav class="nav-service">
+			<ul>
+				<div class="nav__title">Услуги</div>
+				<?php wp_nav_menu('menu=footer_menu_service&menu_class=&container=&'); ?>
+			</ul>
+		</nav>
+
+		<!-- contact block -->
+		<div class="contact_block_container">
+
+			<?php
+				$query1 = new WP_Query('page_id=269'); 
+					while($query1->have_posts()) $query1->the_post(); 
+					the_content();
+				wp_reset_query(); 
+			?>
+
+			<div class="order" id="bottomForm">Заказать лицензию</div>
+		</div>
+
+		<section class="copyright">
+			<div class="gerbs">
+				<div class="rf"><img src="<?php bloginfo('template_url'); ?>/images/gerbrf.png" title="Работаем по всей территории Российской Федерации"></div>
+				<div class="minkomsvyaz" style="margin: 30px;"><img src="<?php bloginfo('template_url'); ?>/images/minkomsvyaz.png" title="Министерство связи и массовых коммуникаций Российской Федерации (Минкомсвязь России)"></div>
+				<div class="roskomnadzor"><img src="<?php bloginfo('template_url'); ?>/images/roskomnadzor.png" title="Федеральная служба по надзору в сфере связи, информационных технологий и массовых коммуникаций"></div>
+			</div>
+			<div>
+				<div>© Сайт компании "Инфо-Связь Консалтинг" (2008-2017г), лицензирование услуг связи.</div>
+				<div>
+					/ <a href="https://infoscon.ru/sitemap/">Карта сайта</a> 
+				</div>
+			</div>
+
+		</section>
+
+
+
+	</section>
+
+</footer>
+<!-- // ФУТЕР -->
+
+
+<noindex>
+
+
+
+<script>
+
+/*Всплывающее уведомление*/
+// PopUp Form and thank you popup after sending message
+var $popOverlay = $(".popup-overlay");
+var $popWindow = $(".popWindow");
+var $subscribeWindow = $(".subscribe_window");
+var $popThankYouWindow = $(".thank_you_window");
+var $popClose = $(".close-btn");
+ 
+  // Close Pop-Up after clicking on the button "Close"
+$(function() {  
+  $popClose.on("click", function() {
+    $popOverlay.fadeOut();
+    $popWindow.fadeOut();
+  });
+ 
+  // Close Pop-Up after clicking on the Overlay
+  $(document).on("click", function(event) {
+    if ($(event.target).closest($popWindow).length) return;
+    $popOverlay.fadeOut();
+    $popWindow.fadeOut();
+    event.stopPropagation();
+  });
+  
+
+  // Form Subscribe
+  $(".subscribe-form").submit(function() {
+    var th = $(this);
+    $.ajax({
+      type: "POST",
+      url: "mail.php",
+      data: th.serialize()
+    }).done(function() {
+      // после успешной отправки скрываем форму подписки и выводим окно с благодарностью за заполнение формы
+      $subscribeWindow.fadeOut();
+      $popThankYouWindow.fadeIn();
+      // используем куки на 30 дней, если человек заполнил форму
+      // для куки обязательно должен быть подключен jquery.cookie.min.js
+      $.cookie('hideTheModal', 'true', { expires: 1 });
+      // очищаем форму
+      setTimeout(function() {
+        th.trigger("reset");
+      }, 1000);
+    });
+    return false;
+  });
+});
+
+// используйте этот код, если нужно появление формы без куки
+// $(window).load(function() {
+//   setTimeout(function() {
+//     $popOverlay.fadeIn();
+//     $subscribeWindow.fadeIn();
+//   }, 1000); /*таймаут появления*/
+// });
+</script>
+<!--Конец всплывающего уведомления-->
+
+	<!-- Yandex.Metrika counter -->
+		<script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter32281124 = new Ya.Metrika({ id:32281124, clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="https://mc.yandex.ru/watch/32281124" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+	<!-- /Yandex.Metrika counter -->
+
+	<!-- google-analytics -->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-67070394-1', 'auto');
+	  ga('send', 'pageview');
+	</script>	
+	<!-- /google-analytics -->
+
+</noindex>
+
+<?php wp_footer(); ?>
+
+	<!--<div id="feedback_me"><a href="https://infoscon.ru/license-pro.ru/" target="_blank">Предыдущая версия сайта</a></div> -->
+	<a href="#" class="scrollToTop">^</a>
+
+
+<?php include('forms.php');?>
+
+
+
+<!--<script type="text/javascript">
+/* init Call Service */
+var CallSiteId = '4b3eee080bb57f99dfbbb924cde5e5cc';
+var CallBaseUrl = '//uptocall.com';
+(function() {
+    var lt = document.createElement('script');
+    lt.type ='text/javascript';
+    lt.charset = 'utf-8';
+    lt.async = true;
+    lt.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + CallBaseUrl + '/widget/client.js?rnd='+Math.floor(Math.random(0,1000)*1000);
+    var sc = document.getElementsByTagName('script')[0];
+    if (sc) sc.parentNode.insertBefore(lt, sc);
+    else document.documentElement.firstChild.appendChild(lt);
+})();
+</script>-->
+
+</body>
+</html>
